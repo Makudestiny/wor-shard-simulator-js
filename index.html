@@ -2,14 +2,22 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Page for Summoning Simulator</title>
+    <title>Watcher of Realms Summoning Simulator</title>
     <link rel='stylesheet' type='text/css' media='screen' href='styles.css'>
     <script src='scripts.js' defer></script>
   </head>
   <body>
-    <h1>Test Header for Simulator</h1>
-    <p>P1</p>
-    <p>P2</p>
-    <p>P3</p>
+    <h1>Watcher of Realms Summoning Simulator</h1>
+    <label>
+      <span class="input-label">Number of Pulls: </span>
+      <input type="number" id="numPulls" placeholder="1">
+    </label>
+    <label>
+      <span class="input-label">Number of Simulations: </span>
+      <input type="number" id="numIterations" placeholder="1">
+    </label>
+    <label>
+      <button type="button" id="Submit" onclick="simulatePulls()">Start Simulation</button>
+    </label>
   </body>
 </html>

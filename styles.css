@@ -4,3 +4,14 @@ body {
     color:lightgray;
     text-align: left;
 }
+
+label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.input-label {
+    width: 170px;
+    align-items: left;
+}

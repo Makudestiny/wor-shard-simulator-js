@@ -1,8 +1,14 @@
+/* 
+# = ID
+. = class
+*/
+
 body {
     margin: 0;
-    background: black;
-    color:lightgray;
+    background: #1638d1;
+    color: black;
     text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 h1 {
@@ -21,9 +27,15 @@ label {
     margin-bottom: 10px;
 }
 
+.span-output {
+    display: block;
+    white-space: pre;
+}
+
 .input-label {
-    width: 170px;
+    width: 200px;
     align-items: left;
+    font-weight: bold;
 }
 
 /* .version {

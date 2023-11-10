@@ -22,43 +22,42 @@ const points = {
 const arrayAverage = array => array.reduce((a, b) => a + b) / array.length;
 // console.log(arrayAverage([1,2,3,4,5]));
 
+let _numPulls;
+let _numIterations;
+let trimSize;
+let pointTotals = [];
+
+
 function startIterations() {
-    const _numPulls = document.getElementById('numPulls').value;
-    const _numIterations = document.getElementById('numIterations').value;
-    const trimSize = Math.round(_numIterations * 0.02)
-    alert("trimSize: " + trimSize);
+    _numPulls = document.getElementById('numPulls').value;
+    _numIterations = document.getElementById('numIterations').value;
+    
+    trimSize = Math.floor(_numIterations * 0.02);
+    console.log('_numPulls: ' + _numPulls);
+    console.log('_numIterations: ' + _numIterations);
+    console.log('trimSize: ' + trimSize);
 
-    const pointTotals = []
+    console.log('started pulls');
     for (let curIteration = 0; curIteration < _numIterations; curIteration++) {
-        let iterationPoints = startPulls(_numPulls);
-        // alert("iterationPoints: " + iterationPoints);
-        pointTotals.push(iterationPoints);
+        console.log('curIteration = ' + curIteration);
+        pointTotals.push(startPulls());
     }
+    console.log('finished pulls');
 
-    alert("pointTotals size: " + pointTotals.length);
-    alert("pointTotals average: " + arrayAverage(pointTotals));
+    generateResultHTML();
 
-    pointTotals.sort();
-    pointTotals.reverse();
-
-    for (let curPop = 0; curPop < trimSize; curPop++)
-    {
-        pointTotals.pop();
-    }
-
-    let lastVal = pointTotals.pop();
-    alert("98% value: " + lastVal);
    
 }
 
-function startPulls(numPulls) {
+function startPulls() {
     let totalPoints = 0;
 
-    for (let curPull = 0; curPull < numPulls; curPull++) {
+    for (let curPull = 0; curPull < _numPulls; curPull++) {
         let pullOutcome = simulateCrystalPull();
         totalPoints += points[pullOutcome];
     }
 
+    // console.log('totalPoints: ' + totalPoints);
     return totalPoints;
 
 }
@@ -72,4 +71,70 @@ function simulateCrystalPull() {
         }
         randValue -= rareCrystalSummonChances[crystalOutcome];
     }
+}
+
+function generateResultHTML() {
+    clearResults();
+    const _outputResults = document.querySelector('#outputResults');
+    let newSpanText = document.createTextNode('# of Iterations: ' + _numIterations);;
+    const divElement = document.createElement("div");
+    const spanElement = document.createElement("span");
+    const divClassName = "div-output"
+    const spanClassName = "span-output"
+    const outRows = 4;
+
+    if (pointTotals.length > 0) {
+
+        for(let i = 0; i < outRows; i++) {
+            const spanElement = document.createElement("span");
+            switch (i) {
+                case 0:
+                    newSpanText = document.createTextNode('# of Simulations: ' + _numIterations);
+                    break;
+                case 1:
+                    newSpanText = document.createTextNode('# of Summons: ' + _numPulls);
+                    break;
+                case 2:
+                    if (pointTotals.length > 1) {
+                        newSpanText = document.createTextNode('Average: ' + Math.round(arrayAverage(pointTotals)));
+                    }
+                    else {
+                        newSpanText = document.createTextNode('Average: ' + pointTotals[0]);
+                    }
+                    break;
+                case 3:
+                    pointTotals.sort();
+                    pointTotals.reverse();
+                
+                    for (let curPop = 0; curPop < trimSize; curPop++)
+                    {
+                        pointTotals.pop();
+                    }
+                
+                    const lastVal = pointTotals.pop();
+
+                    newSpanText = document.createTextNode('98% value: ' + lastVal);
+                    break;
+            }
+            
+            spanElement.appendChild(newSpanText);
+            spanElement.setAttribute( "class", spanClassName);
+            divElement.appendChild(spanElement);
+        }
+        divElement.setAttribute( "class", divClassName);
+
+    }
+    else {
+        newSpanText = document.createTextNode('No Simulations Attempted');
+        spanElement.appendChild(newSpanText);
+        divElement.appendChild(spanElement);
+    }
+
+    _outputResults.appendChild(divElement);
+
+}
+
+function clearResults() {
+    const _outputResults = document.querySelector('#outputResults');
+    _outputResults.innerHTML = "";
 }

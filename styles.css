@@ -5,10 +5,11 @@
 
 body {
     margin: 0;
-    background: #1638d1;
+    background: rgb(74, 187, 221);
     color: black;
     text-align: left;
     font-family: Arial, Helvetica, sans-serif;
+    box-shadow: inset 0 0 10px #051644;
 }
 
 h1 {
@@ -27,6 +28,35 @@ label {
     margin-bottom: 10px;
 }
 
+.textInput {
+    width: 140px;
+    text-align: right;
+}
+
+.shardType {
+    height: 25px;
+    width: 120px;
+    border: 1px;
+    border-style:dotted;
+}
+
+#rareSummonBtn.shardType  {
+    background-color: rgb(74, 187, 221);
+    box-shadow:inset 0 0 10px #051644;
+}
+
+#divineSummonBtn.shardType  {
+    background-color: rgb(240, 240, 86);
+}
+
+#ancientSummoningBtn.shardType  {
+    background-color: rgb(238, 73, 73);
+}
+
+#eventType {
+    width: 140px;
+}
+
 .span-output {
     display: block;
     white-space: pre;
@@ -36,6 +66,13 @@ label {
     width: 200px;
     align-items: left;
     font-weight: bold;
+}
+
+.input-sublabel {
+    width: 200px;
+    align-items: left;
+    font-weight: bold;
+    font-size: xx-small;
 }
 
 /* .version {

@@ -263,21 +263,21 @@ function updateShardType(shardType) {
     curShardType = shardType;
     switch(shardType) {
         case 'Rare':
-            document.body.style.background = "rgb(74, 187, 221)";
+            document.body.style.background = "#599fe7";
             document.getElementById("rareSummonBtn").style.boxShadow = "inset 0 0 10px #051644";
             document.getElementById("divineSummonBtn").style.boxShadow = "none";
             document.getElementById("ancientSummoningBtn").style.boxShadow = "none";
             curShardType = 'rareCrystal';
             break;
         case 'Divine':
-            document.body.style.background = "rgb(240, 240, 86)";
+            document.body.style.background = "#feeb93";
             document.getElementById("rareSummonBtn").style.boxShadow = "none";
             document.getElementById("divineSummonBtn").style.boxShadow = "inset 0 0 10px #440345";
             document.getElementById("ancientSummoningBtn").style.boxShadow = "none";
             curShardType = 'divineCrystal';
             break;
         case 'Ancient':
-            document.body.style.background = "rgb(238, 73, 73)";
+            document.body.style.background = "#f13b44";
             document.getElementById("rareSummonBtn").style.boxShadow = "none";
             document.getElementById("divineSummonBtn").style.boxShadow = "none";
             document.getElementById("ancientSummoningBtn").style.boxShadow = "inset 0 0 10px #440505";

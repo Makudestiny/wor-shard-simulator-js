@@ -5,7 +5,7 @@
 
 body {
     margin: 0;
-    background: rgb(74, 187, 221);
+    background: #599fe7;
     color: black;
     text-align: left;
     font-family: Arial, Helvetica, sans-serif;
@@ -34,23 +34,30 @@ label {
 }
 
 .shardType {
-    height: 25px;
-    width: 120px;
+    height: 70px;
+    width: 70px;
     border: 1px;
     border-style:dotted;
 }
 
+/* .shardType {
+    height: 25px;
+    width: 120px;
+    border: 1px;
+    border-style:dotted;
+} */
+
 #rareSummonBtn.shardType  {
-    background-color: rgb(74, 187, 221);
+    background-color: #599fe7;
     box-shadow:inset 0 0 10px #051644;
 }
 
 #divineSummonBtn.shardType  {
-    background-color: rgb(240, 240, 86);
+    background-color: #feeb93;
 }
 
 #ancientSummoningBtn.shardType  {
-    background-color: rgb(238, 73, 73);
+    background-color: #f13b44;
 }
 
 #eventType {

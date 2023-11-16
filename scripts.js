@@ -335,7 +335,7 @@ function generateResultHTML() {
                         tdElement.setAttribute( "class", tdNormalClassName);
                         break;
                     case 1:
-                        tdElement.appendChild(document.createTextNode(parseFloat(pullGrandTotals[key])/parseFloat(_numIterations)));
+                        tdElement.appendChild(document.createTextNode((parseFloat(pullGrandTotals[key])/parseFloat(_numIterations)).toFixed(2)));
                         tdElement.setAttribute( "class", tdResultClassName);
                         break;
                 }

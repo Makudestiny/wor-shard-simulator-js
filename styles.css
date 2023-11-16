@@ -4,7 +4,8 @@
 */
 
 body {
-    margin: 0;
+    margin:0;
+    padding: 5px 10px;
     background: #599fe7;
     color: black;
     text-align: left;
@@ -29,7 +30,7 @@ label {
 }
 
 .textInput {
-    width: 140px;
+    width: 70px;
     text-align: right;
 }
 
@@ -64,13 +65,19 @@ label {
     width: 140px;
 }
 
-.span-output {
-    display: block;
+.tr-output {
+    /* display: block; */
     white-space: pre;
 }
 
+#bannerTypeLabel {
+    width: 105px;
+    align-items: left;
+    font-weight: bold;
+}
+
 .input-label {
-    width: 200px;
+    width: 140px;
     align-items: left;
     font-weight: bold;
 }

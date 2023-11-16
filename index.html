@@ -8,7 +8,7 @@
   </head>
   <body>
     <h1>Watcher of Realms Summoning Simulator</h1>
-    <h5 class="version">v0.1.4</h5>
+    <h5 class="version">v0.1.5</h5>
     <label>
       <button type="button" class="shardType" id="rareSummonBtn" onclick="updateShardType('Rare')">
         <img src="images/Rare_Summoning_Crystal.png" alt="Rare Summoning Crystal" height="58px" width="58px">
@@ -21,18 +21,18 @@
       </button>
     </label>
     <label>
-      <span class="input-label">Number of Summons: </span>
+      <span class="input-label"># of Summons: </span>
       <input class="textInput" type="number" id="numPulls" value="1">
     </label>
     <label>
-      <span class="input-label">Number of Simulations: </span>
+      <span class="input-label"># of Simulations: </span>
       <input class="textInput" type="number" id="numIterations" value="1">
     </label>
     <label>
-      <span class="input-label">Event Type: </span>
+      <span id="bannerTypeLabel" class="input-label">Banner Type: </span>
       <select id="bannerType">
-        <option value="normalBanner">Normal Banner</option>
-        <option value="twoXBanner">2x Legendary Banner</option>
+        <option value="normalBanner">Normal</option>
+        <option value="twoXBanner">2x Legendary</option>
         <!-- <option value="onePlusOne">1+1 Banner</option> TODO: 1+1 javascript logic -->
       </select>
     </label>

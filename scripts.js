@@ -77,6 +77,23 @@ let pullGrandTotals = {
 
 };
 
+let details = {
+    noLegendaryLord:0
+    , multiLegendaryLord:0
+    , noLegendary:0
+    , multiLegendary:0
+    , noEpicLord:0
+    , multiEpicLord:0
+    , noEpic:0
+    , multiEpic:0
+    , noRareLord:0
+    , multiRareLord:0
+    , noRare:0
+    , multiRare:0
+    , noUncommon:0
+    , multiUncommon:0
+};
+
 const arrayAverage = array => array.reduce((a, b) => a + b) / array.length;
 
 let _numPulls;
@@ -200,30 +217,39 @@ function generateResultHTML() {
 
     clearResults();
     const _outputResults = document.querySelector('#outputResults');
-    let newSpanText = document.createTextNode('# of Iterations: ' + _numIterations);;
+    let newSpanText = document.createTextNode(' ');
+    let newDataText = document.createTextNode(' ');
     const divElement = document.createElement("div");
-    const spanElement = document.createElement("span");
     const divClassName = "div-output"
-    const spanClassName = "span-output"
-    const outRows = 4;
+    const tableClassName = "table-output"
+    const trClassName = "tr-output"
+    const tdLabelClassName = "td-label-output"
+    const tdResultClassName = "td-result-output"
+    const outRows = 6;
+
+//TODO: Update output to include more numbers.
 
     if (pointTotals.length > 0) {
+        const tableElement = document.createElement("table");
 
         for(let i = 0; i < outRows; i++) {
-            const spanElement = document.createElement("span");
+            const trElement = document.createElement("tr");
             switch (i) {
                 case 0:
-                    newSpanText = document.createTextNode('# of Simulations: ' + _numIterations);
+                    newSpanText = document.createTextNode('# of Simulations: ');
+                    newDataText = document.createTextNode( _numIterations);
                     break;
                 case 1:
-                    newSpanText = document.createTextNode('# of Summons: ' + _numPulls);
+                    newSpanText = document.createTextNode('# of Summons: ');
+                    newDataText = document.createTextNode(_numPulls);
                     break;
                 case 2:
+                    newSpanText = document.createTextNode('Average: ');
                     if (pointTotals.length > 1) {
-                        newSpanText = document.createTextNode('Average: ' + Math.round(arrayAverage(pointTotals)));
+                        newDataText = document.createTextNode(Math.round(arrayAverage(pointTotals)));
                     }
                     else {
-                        newSpanText = document.createTextNode('Average: ' + pointTotals[0]);
+                        newDataText = document.createTextNode(pointTotals[0]);
                     }
                     break;
                 case 3:
@@ -237,15 +263,106 @@ function generateResultHTML() {
                 
                     const lastVal = pointTotals.pop();
 
-                    newSpanText = document.createTextNode('98% value: ' + lastVal);
+                    newSpanText = document.createTextNode('98% value: ');
+                    newDataText = document.createTextNode(lastVal);
+                    break;
+                case 4:
+                    newSpanText = document.createTextNode(' ');
+                    newDataText = document.createTextNode(' ');
+                    break;
+                case 5:
+                    newSpanText = document.createTextNode('Average Outcomes');
+                    newDataText = document.createTextNode(' ');
                     break;
             }
+
+            for (let j = 0; j < 2; j++) {
+                const tdElement = document.createElement("td");
+                switch(j) {
+                    case 0:
+                        tdElement.appendChild(newSpanText);
+                        tdElement.setAttribute( "class", tdLabelClassName);
+                        break;
+                    case 1:
+                        tdElement.appendChild(newDataText);
+                        tdElement.setAttribute( "class", tdResultClassName);
+                        break;
+                }
+                trElement.appendChild(tdElement);
+            }
             
-            spanElement.appendChild(newSpanText);
-            spanElement.setAttribute( "class", spanClassName);
-            divElement.appendChild(spanElement);
+            trElement.setAttribute( "class", trClassName);
+            tableElement.appendChild(trElement);
         }
+
+        for(const key in pullGrandTotals) {
+            const trElement = document.createElement("tr");
+            for (let j = 0; j < 2; j++) {
+                const tdElement = document.createElement("td");
+                switch(j) {
+                    case 0:
+                        tdElement.appendChild(document.createTextNode(key));
+                        tdElement.setAttribute( "class", tdLabelClassName);
+                        break;
+                    case 1:
+                        tdElement.appendChild(document.createTextNode(parseFloat(pullGrandTotals[key])/parseFloat(_numIterations)));
+                        tdElement.setAttribute( "class", tdResultClassName);
+                        break;
+                }
+                trElement.appendChild(tdElement);
+            }
+            trElement.setAttribute( "class", trClassName);
+            tableElement.appendChild(trElement);
+        }
+
+
+
+
+
+        tableElement.setAttribute( "class", tableClassName);
+        divElement.appendChild(tableElement);
         divElement.setAttribute( "class", divClassName);
+
+
+
+
+        // for(let i = 0; i < outRows; i++) {
+        //     const spanElement = document.createElement("span");
+        //     switch (i) {
+        //         case 0:
+        //             newSpanText = document.createTextNode('# of Simulations: ' + _numIterations);
+        //             break;
+        //         case 1:
+        //             newSpanText = document.createTextNode('# of Summons: ' + _numPulls);
+        //             break;
+        //         case 2:
+        //             if (pointTotals.length > 1) {
+        //                 newSpanText = document.createTextNode('Average: ' + Math.round(arrayAverage(pointTotals)));
+        //             }
+        //             else {
+        //                 newSpanText = document.createTextNode('Average: ' + pointTotals[0]);
+        //             }
+        //             break;
+        //         case 3:
+        //             pointTotals.sort(function(a,b){return a - b});
+        //             pointTotals.reverse();
+                
+        //             for (let curPop = 0; curPop < trimSize; curPop++)
+        //             {
+        //                 pointTotals.pop();
+        //             }
+                
+        //             const lastVal = pointTotals.pop();
+
+        //             newSpanText = document.createTextNode('98% value: ' + lastVal);
+        //             break;
+        //     }
+            
+        //     spanElement.appendChild(newSpanText);
+        //     spanElement.setAttribute( "class", spanClassName);
+        //     divElement.appendChild(spanElement);
+        // }
+        // divElement.setAttribute( "class", divClassName);
 
     }
     else {

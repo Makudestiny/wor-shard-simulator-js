@@ -66,8 +66,21 @@ label {
 }
 
 .tr-output {
-    /* display: block; */
     white-space: pre;
+}
+
+.td-normal-output  {
+    text-transform: capitalize;
+}
+
+.td-label-output  {
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.tr-header-output {
+    font-weight: bold;
+    text-decoration-line: underline;
 }
 
 #bannerTypeLabel {

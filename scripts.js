@@ -33,7 +33,7 @@ const summonChances = {
             , legendaryLord: .008
         }
     }
-    //TODO: This is incomplete
+     //TODO: Fix Ancient Summon Chances
     , ancientCrystal: {
         normalBanner: {
             rare:.3751
@@ -78,23 +78,37 @@ let pullGrandTotals = {
 };
 
 let details = {
-    noLegendaryLord:0
-    , multiLegendaryLord:0
-    , noLegendary:0
-    , multiLegendary:0
-    , noEpicLord:0
-    , multiEpicLord:0
-    , noEpic:0
-    , multiEpic:0
-    , noRareLord:0
-    , multiRareLord:0
-    , noRare:0
-    , multiRare:0
-    , noUncommon:0
-    , multiUncommon:0
+    zero:{
+        legendaryLord:0
+        , legendary:0
+        , epicLord:0
+        , epic:0
+        , rareLord:0
+        , rare:0
+        , uncommon:0
+    }
+    , multiple:{
+        legendaryLord:0
+        , legendary:0
+        , epicLord:0
+        , epic:0
+        , rareLord:0
+        , rare:0
+        , uncommon:0
+    }
 };
 
+let pointTotals = [];
+
 const arrayAverage = array => array.reduce((a, b) => a + b) / array.length;
+const divClassName = "div-output"
+const tableClassName = "table-output"
+const trClassName = "tr-output"
+const trBlankClassName = "tr-blank-output"
+const trHeaderClassName = "tr-header-output"
+const tdLabelClassName = "td-label-output"
+const tdNormalClassName = "td-normal-output"
+const tdResultClassName = "td-result-output"
 
 let _numPulls;
 let _numIterations;
@@ -102,8 +116,6 @@ let curShardType = 'rareCrystal';
 let debugFlag = 0;
 let simulationChances;
 let trimSize;
-let pointTotals = [];
-
 
 function startIterations() {
     debugLogging('Begin startIterations');
@@ -120,6 +132,26 @@ function startIterations() {
     
     };
     pointTotals = [];
+    details = {
+        zero:{
+            legendaryLord:0
+            , legendary:0
+            , epicLord:0
+            , epic:0
+            , rareLord:0
+            , rare:0
+            , uncommon:0
+        }
+        , multiple:{
+            legendaryLord:0
+            , legendary:0
+            , epicLord:0
+            , epic:0
+            , rareLord:0
+            , rare:0
+            , uncommon:0
+        }
+    };
 
     debugLogging('_numPulls: ' + _numPulls);
     debugLogging('_numIterations: ' + _numIterations);
@@ -164,19 +196,29 @@ function startPulls() {
     };
 
     if(validateShardChances(simulationChances) == false) {
-        alert("Shard Chances broken.");
+        alert("Shard Chances broken. Known issue for Ancient Summons"); //TODO: Fix Ancient Summon Chances
     }
     else 
     {
+        let curDetailObj;
         for (let curPull = 0; curPull < _numPulls; curPull++) {
             let pullOutcome = simulateCrystalPull(simulationChances);
-            pullTotals[pullOutcome] += 1;
+            pullTotals[pullOutcome]++;
             totalPoints += points[pullOutcome];
         }
-    
-        // debugLogging(pullTotals);
+
         for (const heroType in pullTotals) {
             pullGrandTotals[heroType] += pullTotals[heroType];
+            
+            curDetailObj = details['zero'];
+            if (pullTotals[heroType] == 0) {
+                curDetailObj[heroType]++;
+            }
+            curDetailObj = details['multiple'];
+            if (pullTotals[heroType] > 1) {
+                curDetailObj[heroType]++;
+
+            }
         }
     }
 
@@ -189,7 +231,6 @@ function validateShardChances(shardChancesObj) {
     for (const crystalOutcome in shardChancesObj) {
         totalPercent += shardChancesObj[crystalOutcome];
     }
-    // debugLogging('totalPercent: ' + totalPercent);
 
     if (totalPercent == 1.0) {
         return true;
@@ -217,17 +258,11 @@ function generateResultHTML() {
 
     clearResults();
     const _outputResults = document.querySelector('#outputResults');
-    let newSpanText = document.createTextNode(' ');
+    let newLabelText = document.createTextNode(' ');
     let newDataText = document.createTextNode(' ');
     const divElement = document.createElement("div");
-    const divClassName = "div-output"
-    const tableClassName = "table-output"
-    const trClassName = "tr-output"
-    const tdLabelClassName = "td-label-output"
-    const tdResultClassName = "td-result-output"
-    const outRows = 6;
-
-//TODO: Update output to include more numbers.
+    const spanElement = document.createElement("span");
+    const outRows = 4;
 
     if (pointTotals.length > 0) {
         const tableElement = document.createElement("table");
@@ -236,15 +271,15 @@ function generateResultHTML() {
             const trElement = document.createElement("tr");
             switch (i) {
                 case 0:
-                    newSpanText = document.createTextNode('# of Simulations: ');
+                    newLabelText = document.createTextNode('# of Simulations: ');
                     newDataText = document.createTextNode( _numIterations);
                     break;
                 case 1:
-                    newSpanText = document.createTextNode('# of Summons: ');
+                    newLabelText = document.createTextNode('# of Summons: ');
                     newDataText = document.createTextNode(_numPulls);
                     break;
                 case 2:
-                    newSpanText = document.createTextNode('Average: ');
+                    newLabelText = document.createTextNode('Average: ');
                     if (pointTotals.length > 1) {
                         newDataText = document.createTextNode(Math.round(arrayAverage(pointTotals)));
                     }
@@ -263,16 +298,8 @@ function generateResultHTML() {
                 
                     const lastVal = pointTotals.pop();
 
-                    newSpanText = document.createTextNode('98% value: ');
+                    newLabelText = document.createTextNode('98% value: ');
                     newDataText = document.createTextNode(lastVal);
-                    break;
-                case 4:
-                    newSpanText = document.createTextNode(' ');
-                    newDataText = document.createTextNode(' ');
-                    break;
-                case 5:
-                    newSpanText = document.createTextNode('Average Outcomes');
-                    newDataText = document.createTextNode(' ');
                     break;
             }
 
@@ -280,7 +307,7 @@ function generateResultHTML() {
                 const tdElement = document.createElement("td");
                 switch(j) {
                     case 0:
-                        tdElement.appendChild(newSpanText);
+                        tdElement.appendChild(newLabelText);
                         tdElement.setAttribute( "class", tdLabelClassName);
                         break;
                     case 1:
@@ -295,14 +322,17 @@ function generateResultHTML() {
             tableElement.appendChild(trElement);
         }
 
+        addBlankTableRow(tableElement);
+        addHeadingTableRow(tableElement, 'Average Outcomes');
+
         for(const key in pullGrandTotals) {
             const trElement = document.createElement("tr");
             for (let j = 0; j < 2; j++) {
                 const tdElement = document.createElement("td");
                 switch(j) {
                     case 0:
-                        tdElement.appendChild(document.createTextNode(key));
-                        tdElement.setAttribute( "class", tdLabelClassName);
+                        tdElement.appendChild(document.createTextNode(translateKey(key)));
+                        tdElement.setAttribute( "class", tdNormalClassName);
                         break;
                     case 1:
                         tdElement.appendChild(document.createTextNode(parseFloat(pullGrandTotals[key])/parseFloat(_numIterations)));
@@ -315,65 +345,88 @@ function generateResultHTML() {
             tableElement.appendChild(trElement);
         }
 
+        addBlankTableRow(tableElement);
+        addHeadingTableRow(tableElement, 'Zero and Multi Outcomes');
 
+        
+        for(const category in details) {
+            for (const heroType in details[category]) {
+                console.log(`Category: ${category} heroType:${heroType} ${details[category][heroType]}`);
 
+                const trElement = document.createElement("tr");
 
-
+                for (let j = 0; j < 2; j++) {
+                    const tdElement = document.createElement("td");
+                    let curTextNode = document.createTextNode(' ');
+                    switch(j) {
+                        case 0:
+                            curTextNode.nodeValue = translateKey(category) + ' ' + translateKey(heroType);
+                            tdElement.setAttribute( "class", tdNormalClassName);
+                            break;
+                        case 1:
+                            let outText = details[category][heroType];
+                            outText = outText + ' (' + (parseFloat(details[category][heroType])/parseFloat(_numIterations)*100).toFixed(2) + '%)';
+                            curTextNode.nodeValue = outText;
+                            tdElement.setAttribute( "class", tdResultClassName);
+                            break;
+                    }
+                    tdElement.appendChild(curTextNode);
+                    trElement.appendChild(tdElement);
+                }
+                trElement.setAttribute( "class", trClassName);
+                tableElement.appendChild(trElement);
+            }
+        }
         tableElement.setAttribute( "class", tableClassName);
         divElement.appendChild(tableElement);
         divElement.setAttribute( "class", divClassName);
 
-
-
-
-        // for(let i = 0; i < outRows; i++) {
-        //     const spanElement = document.createElement("span");
-        //     switch (i) {
-        //         case 0:
-        //             newSpanText = document.createTextNode('# of Simulations: ' + _numIterations);
-        //             break;
-        //         case 1:
-        //             newSpanText = document.createTextNode('# of Summons: ' + _numPulls);
-        //             break;
-        //         case 2:
-        //             if (pointTotals.length > 1) {
-        //                 newSpanText = document.createTextNode('Average: ' + Math.round(arrayAverage(pointTotals)));
-        //             }
-        //             else {
-        //                 newSpanText = document.createTextNode('Average: ' + pointTotals[0]);
-        //             }
-        //             break;
-        //         case 3:
-        //             pointTotals.sort(function(a,b){return a - b});
-        //             pointTotals.reverse();
-                
-        //             for (let curPop = 0; curPop < trimSize; curPop++)
-        //             {
-        //                 pointTotals.pop();
-        //             }
-                
-        //             const lastVal = pointTotals.pop();
-
-        //             newSpanText = document.createTextNode('98% value: ' + lastVal);
-        //             break;
-        //     }
-            
-        //     spanElement.appendChild(newSpanText);
-        //     spanElement.setAttribute( "class", spanClassName);
-        //     divElement.appendChild(spanElement);
-        // }
-        // divElement.setAttribute( "class", divClassName);
-
     }
     else {
-        newSpanText = document.createTextNode('No Simulations Attempted');
-        spanElement.appendChild(newSpanText);
+        newLabelText = document.createTextNode('No Simulations Attempted');
+        spanElement.appendChild(newLabelText);
         divElement.appendChild(spanElement);
     }
 
     _outputResults.appendChild(divElement);
 
     debugLogging('  End generateResultHTML');
+}
+
+function translateKey(keyValue) {
+    let retVal = '';
+
+    switch(keyValue) {
+        case 'legendaryLord': retVal = 'Legendary Lord'; break;
+        case 'legendary': retVal = 'Legendary'; break;
+        case 'epicLord': retVal = 'Epic Lord'; break;
+        case 'epic': retVal = 'Epic'; break;
+        case 'rareLord': retVal = 'Rare Lord'; break;
+        case 'rare': retVal = 'Rare'; break;
+        case 'uncommon': retVal = 'Uncommon'; break;
+        case 'zero': retVal = 'Zero'; break;
+        case 'multiple': retVal = 'Multiple'; break;
+    }
+
+    return retVal;
+}
+
+function addBlankTableRow(documentElement) {
+    const trElement = document.createElement("tr");
+    const tdElement = document.createElement("td");
+    tdElement.appendChild(document.createTextNode(' '));
+    trElement.appendChild(tdElement);
+    trElement.setAttribute( "class", trBlankClassName);
+    documentElement.appendChild(trElement);
+}
+
+function addHeadingTableRow(documentElement, headerText) {
+    const trElement = document.createElement("tr");
+    const tdElement = document.createElement("td");
+    tdElement.appendChild(document.createTextNode(headerText));
+    trElement.appendChild(tdElement);
+    trElement.setAttribute( "class", trHeaderClassName);
+    documentElement.appendChild(trElement);
 }
 
 function updateShardType(shardType) {

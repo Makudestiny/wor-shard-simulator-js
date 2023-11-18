@@ -33,25 +33,22 @@ const summonChances = {
             , legendaryLord: .008
         }
     }
-     //TODO: Fix Ancient Summon Chances
     , ancientCrystal: {
         normalBanner: {
-            rare:.3751
-            , rareLord:.0399
-            , epic:.08
-            , epicLord:.06
-            , legendary: .01
-            , legendaryLord: .008
+            rare:.6020
+            , rareLord:.2700
+            , epic:.0500
+            , epicLord:.0600
+            , legendary: .0100
+            , legendaryLord: .0080
         }
-        // .8% legendary lord, 1% legendary, 6% epic lord, 8% epic rest rares
         , twoXBanner: {
-            uncommon:.5000
-            ,rare:.3751
-            , rareLord:.0399
-            , epic:.0788
-            , epicLord:.0012
-            , legendary: .0046
-            , legendaryLord: .0004
+            rare:.5840
+            , rareLord:.2700
+            , epic:.0500
+            , epicLord:.0600
+            , legendary: .0200
+            , legendaryLord: .0160
         }
     }
 };
@@ -112,6 +109,7 @@ const tdResultClassName = "td-result-output"
 
 let _numPulls;
 let _numIterations;
+let _bannerType;
 let curShardType = 'rareCrystal';
 let debugFlag = 0;
 let simulationChances;
@@ -432,26 +430,23 @@ function addHeadingTableRow(documentElement, headerText) {
 function updateShardType(shardType) {
     curShardType = shardType;
     switch(shardType) {
-        case 'Rare':
+        case 'rareCrystal':
             document.body.style.background = "#599fe7";
             document.getElementById("rareSummonBtn").style.boxShadow = "inset 0 0 10px #051644";
             document.getElementById("divineSummonBtn").style.boxShadow = "none";
             document.getElementById("ancientSummoningBtn").style.boxShadow = "none";
-            curShardType = 'rareCrystal';
             break;
-        case 'Divine':
+        case 'divineCrystal':
             document.body.style.background = "#feeb93";
             document.getElementById("rareSummonBtn").style.boxShadow = "none";
             document.getElementById("divineSummonBtn").style.boxShadow = "inset 0 0 10px #440345";
             document.getElementById("ancientSummoningBtn").style.boxShadow = "none";
-            curShardType = 'divineCrystal';
             break;
-        case 'Ancient':
+        case 'ancientCrystal':
             document.body.style.background = "#f13b44";
             document.getElementById("rareSummonBtn").style.boxShadow = "none";
             document.getElementById("divineSummonBtn").style.boxShadow = "none";
             document.getElementById("ancientSummoningBtn").style.boxShadow = "inset 0 0 10px #440505";
-            curShardType = 'ancientCrystal';
             break;
     }
     return;
